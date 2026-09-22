@@ -343,7 +343,7 @@
   </div>
   <h1>誕生日×今日のラッキーカラー診断</h1>
   <label for="birthday">誕生日</label>
-  <input type="date" id="birthday">
+  <input type="date" id="birthday" autocomplete="off">
   <div id="today-note" class="today-note"></div>
   <div id="result-area"></div>
   <div class="share-bar" id="share-bar" hidden>
@@ -614,7 +614,11 @@ function render() {
 
 document.getElementById('birthday').addEventListener('change', render);
 document.getElementById('birthday').addEventListener('input', render);
-render();
+
+window.addEventListener('pageshow', () => {
+  document.getElementById('birthday').value = '';
+  render();
+});
 </script>
 </body>
 </html>
