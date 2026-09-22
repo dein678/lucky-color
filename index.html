@@ -219,6 +219,22 @@
     transition: background 0.25s ease, border-color 0.4s ease, color 0.4s ease;
   }
   .copy-btn:hover { background: var(--theme-color-pale); }
+  .diagnose-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    background: var(--theme-color);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 12px 0;
+    margin-top: 14px;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .diagnose-btn:active { opacity: 0.8; }
+  .diagnose-btn:disabled { background: #ccc; cursor: not-allowed; }
   .copy-btn.copied {
     background: var(--theme-color);
     border-color: var(--theme-color);
@@ -344,6 +360,7 @@
   <h1>誕生日×今日のラッキーカラー診断</h1>
   <label for="birthday">誕生日</label>
   <input type="date" id="birthday" autocomplete="off">
+  <button type="button" class="diagnose-btn" id="diagnose-btn" disabled>診断する</button>
   <div id="today-note" class="today-note"></div>
   <div id="result-area"></div>
   <div class="share-bar" id="share-bar" hidden>
@@ -612,13 +629,22 @@ function render() {
   document.getElementById('share-bar').hidden = false;
 }
 
-document.getElementById('birthday').addEventListener('change', render);
-document.getElementById('birthday').addEventListener('input', render);
+const birthdayInput = document.getElementById('birthday');
+const diagnoseBtn = document.getElementById('diagnose-btn');
 
-window.addEventListener('pageshow', () => {
-  document.getElementById('birthday').value = '';
+function resetView() {
+  birthdayInput.value = '';
+  diagnoseBtn.disabled = true;
   render();
+}
+
+birthdayInput.addEventListener('input', () => {
+  diagnoseBtn.disabled = !birthdayInput.value;
+  if (lastResult) render();
 });
+diagnoseBtn.addEventListener('click', render);
+
+window.addEventListener('pageshow', resetView);
 </script>
 </body>
 </html>
